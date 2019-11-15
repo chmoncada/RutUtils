@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'chileanRutUtils_Example' do
+  pod 'chileanRutUtils', :path => '../'
+
+  target 'chileanRutUtils_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
