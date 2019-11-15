@@ -9,25 +9,16 @@
 Pod::Spec.new do |s|
   s.name             = 'chileanRutUtils'
   s.version          = '0.1.0'
-  s.summary          = 'A short description of chileanRutUtils.'
-
-# This description is used to generate tags and improve search results.
-#   * Think: What does it do? Why did you write it? What is the focus?
-#   * Try to keep it short, snappy and to the point.
-#   * Write the description between the DESC delimiters below.
-#   * Finally, don't worry about the indent, CocoaPods strips it!
-
-  s.description      = <<-DESC
-TODO: Add long description of the pod here.
-                       DESC
+  s.summary          = 'Helper methods to validate and generate RUT Chilean numbers'
 
   s.homepage         = 'https://github.com/chmoncada/chileanRutUtils'
-  # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'chmoncada' => 'chmoncada@me.com' }
   s.source           = { :git => 'https://github.com/chmoncada/chileanRutUtils.git', :tag => s.version.to_s }
 
-  s.ios.deployment_target = '8.0'
+  s.ios.deployment_target = '11.0'
+
+  s.swift_versions = ['5.0', '5.1']
 
   s.source_files = 'chileanRutUtils/Classes/**/*'
 end
