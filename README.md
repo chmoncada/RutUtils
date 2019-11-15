@@ -22,7 +22,7 @@ pod 'chileanRutUtils'
 
 ## Author
 
-chmoncada, charles.moncada.pizarro@everis.com
+chmoncada, chmoncada@me.com
 
 ## License
 
