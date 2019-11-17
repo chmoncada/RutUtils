@@ -6,7 +6,7 @@
 //  Copyright © 2019 CocoaPods. All rights reserved.
 //
 
-@testable import chileanRutUtils
+@testable import RutUtils
 import XCTest
 
 // swiftlint:disable type_body_length

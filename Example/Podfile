@@ -2,11 +2,9 @@ platform :ios, '11.0'
 use_frameworks!
 
 target 'chileanRutUtils_Example' do
-  pod 'chileanRutUtils', :path => '../'
+  pod 'RutUtils', :path => '../'
 
   target 'chileanRutUtils_Tests' do
     inherit! :search_paths
-
-    
   end
 end

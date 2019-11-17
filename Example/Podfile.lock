@@ -1,16 +1,16 @@
 PODS:
-  - chileanRutUtils (0.1.0)
+  - RutUtils (1.0.0)
 
 DEPENDENCIES:
-  - chileanRutUtils (from `../`)
+  - RutUtils (from `../`)
 
 EXTERNAL SOURCES:
-  chileanRutUtils:
+  RutUtils:
     :path: "../"
 
 SPEC CHECKSUMS:
-  chileanRutUtils: 46f767e2032e5182efe21d9bc8834c386b0a4bcd
+  RutUtils: dfe8dc40b72468b90e090075ae2acd01183d5b05
 
-PODFILE CHECKSUM: 6faabb48aa31c06450532f23a07d50ff341ab00c
+PODFILE CHECKSUM: 21a6fd197bdc7d61b126073af33e43f484788cd3
 
 COCOAPODS: 1.8.0
