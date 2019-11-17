@@ -146,7 +146,7 @@ private extension String {
     static let allowedRutCharacters = #"[^\d,^k^K]"#
 
     static let rutFormattedPattern = """
-    ^[0-9]{1,2} # chequea si hay 2 o 3 numeros iniciales
+    ^[0-9]{1,3} # chequea si hay 2 o 3 numeros iniciales
     (\\.[0-9]{3})* # chequea los bloques .XXX
     \\- # signo de division de digito identificador
     [0-9,kK] # digito identificador

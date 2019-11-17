@@ -137,6 +137,18 @@ class RutUtilsTests: XCTestCase {
         XCTAssertEqual(formattedRut, realFormatedRut)
     }
 
+    func testValidRutLengthSeven() {
+        let unformattedRut = "1234560"
+        let formattedRut = "123.456-0"
+        let validator = RutUtils.validateRUT(unformattedRut)
+
+        XCTAssertTrue(validator.isValid)
+        XCTAssertEqual(validator.formatted, formattedRut)
+
+        let realFormatedRut = RutUtils.formatRut(unformattedRut)
+        XCTAssertEqual(formattedRut, realFormatedRut)
+    }
+
     func testValidFormatValidRut() {
         let validRut = "19.200.923-5"
         let validator = RutUtils.validateRUT(validRut)
