@@ -1,5 +1,5 @@
 PODS:
-  - RutUtils (1.0.0)
+  - RutUtils (1.1.0)
 
 DEPENDENCIES:
   - RutUtils (from `../`)
@@ -9,7 +9,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  RutUtils: dfe8dc40b72468b90e090075ae2acd01183d5b05
+  RutUtils: 6c8bdf80bf17668e51054ec56be89ca04c5c33a4
 
 PODFILE CHECKSUM: 21a6fd197bdc7d61b126073af33e43f484788cd3
 

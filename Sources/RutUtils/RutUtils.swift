@@ -9,35 +9,6 @@ import Foundation
 
 public enum RutUtils {
 
-    // MARK: - REGEX Patterns
-
-    private static let allowedRutCharacters = #"[^\d,^k^K]"#
-
-    private static let patternFormatted = """
-    ^[0-9]{1,2} # chequea si hay 2 o 3 numeros iniciales
-    (\\.[0-9]{3})* # chequea los bloques .XXX
-    \\- # signo de division de digito identificador
-    [0-9,kK] # digito identificador
-    """
-
-    private static let patternRaw = """
-    ^[0-9] # un primer digito
-    [0-9]* # varios digitos
-    [0-9,kK]$ # puede terminar en k como digito verificador
-    """
-
-    // MARK: - REGEX definitions
-
-    private static let regexFormatted = try? NSRegularExpression(
-        pattern: patternFormatted,
-        options: .allowCommentsAndWhitespace
-    )
-
-    private static let regexRaw = try? NSRegularExpression(
-        pattern: patternRaw,
-        options: .allowCommentsAndWhitespace
-    )
-
     // MARK: - Methods to check a given RUT is correct
 
     /// This method wil check first if the given rut israw or correct formatted , and second if its a valid chilean rut number
@@ -46,12 +17,8 @@ public enum RutUtils {
     /// - Parameter rut: chilean rut string, can be formatted with hypen and dots, or a string.
     public static func validateRUT(_ rut: String) -> (isValid: Bool, formatted: String) {
 
-        guard
-            let regexFormatted = regexFormatted,
-            let regexRaw = regexRaw,
-            regexFormatted.matches(rut) || regexRaw.matches(rut)
-        else {
-                return (false, rut)
+        guard rut.matchesRutPatterns else {
+            return (false, rut)
         }
 
         let cleanedRut = cleanRut(rut)
@@ -63,11 +30,8 @@ public enum RutUtils {
     /// - Parameter string: chilean rut numbers  with verification digit
     public static func isValidRut(_ rut: String) -> Bool {
         var rutBody = rut
-        guard
-            let regexFormatted = regexFormatted, let regexRaw = regexRaw,
-            regexFormatted.matches(rut) || regexRaw.matches(rut) else {
-                return false
-        }
+
+        guard rut.matchesRutPatterns else { return false }
 
         let lastChar = String(rutBody.removeLast())
         let digit = getValidationDigit(of: rutBody)
@@ -168,14 +132,51 @@ public enum RutUtils {
     ///
     /// - Parameter rut: chilean rut string, can be formatted with hypen and dots, or a string.
     public static func cleanRut(_ rut: String) -> String {
-        let cleanRut = rut.replacingOccurrences(of: allowedRutCharacters, with: "", options: .regularExpression)
+        let cleanRut = rut.replacingOccurrences(of: String.allowedRutCharacters, with: "", options: .regularExpression)
         return cleanRut
     }
 }
 
 // MARK: - Private Extensions
 
+private extension String {
+
+    // MARK: REGEX Patterns
+
+    static let allowedRutCharacters = #"[^\d,^k^K]"#
+
+    static let rutFormattedPattern = """
+    ^[0-9]{1,2} # chequea si hay 2 o 3 numeros iniciales
+    (\\.[0-9]{3})* # chequea los bloques .XXX
+    \\- # signo de division de digito identificador
+    [0-9,kK] # digito identificador
+    """
+
+    static let rutRawPattern = """
+    ^[0-9] # un primer digito
+    [0-9]* # varios digitos
+    [0-9,kK]$ # puede terminar en k como digito verificador
+    """
+
+    var matchesRutPatterns: Bool {
+        return NSRegularExpression.rutFormatted.matches(self) || NSRegularExpression.rutRaw.matches(self)
+    }
+}
+
 private extension NSRegularExpression {
+
+    // MARK: REGEX definitions
+
+    static let rutFormatted = try! NSRegularExpression(
+        pattern: String.rutFormattedPattern,
+        options: .allowCommentsAndWhitespace
+    )
+
+    static let rutRaw = try! NSRegularExpression(
+        pattern: String.rutRawPattern,
+        options: .allowCommentsAndWhitespace
+    )
+
     func matches(_ string: String) -> Bool {
         let range = NSRange(location: 0, length: string.utf16.count)
         return firstMatch(in: string, options: [], range: range) != nil
