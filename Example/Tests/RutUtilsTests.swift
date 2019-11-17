@@ -521,4 +521,26 @@ class RutUtilsTests: XCTestCase {
         let calculatedDV = RutUtils.getValidationDigit(of: bodyRut)
         XCTAssertEqual(calculatedDV, validationDigit)
     }
+
+    // MARK: - getValidRut method
+
+    func testGetRutDigitKSmall() {
+        let bodyRut = "9043943"
+        let formattedRut = "9.043.943-k"
+        let rawRut = "9043943k"
+        let validator = RutUtils.getValidRut(of: bodyRut)
+        XCTAssertTrue(RutUtils.validateRUT(validator.formatted).isValid)
+        XCTAssertEqual(validator.formatted, formattedRut)
+        XCTAssertEqual(validator.rawRut, rawRut)
+    }
+
+    func testGetRutDigit6() {
+        let bodyRut = "14400408"
+        let formattedRut = "14.400.408-6"
+        let rawRut = "144004086"
+        let validator = RutUtils.getValidRut(of: bodyRut)
+        XCTAssertTrue(RutUtils.validateRUT(validator.formatted).isValid)
+        XCTAssertEqual(validator.formatted, formattedRut)
+        XCTAssertEqual(validator.rawRut, rawRut)
+    }
 }

@@ -85,7 +85,7 @@ public enum RutUtils {
     /// This method returns a correct formated chilean rut string
     ///
     /// - Parameter rut: chilean valid rut string, can be formatted with hypen and dots, or a string.
-    public static func formatRut(_ rut: String) -> String! {
+    public static func formatRut(_ rut: String) -> String {
 
         var cleanedRut = cleanRut(rut)
 
@@ -135,6 +135,30 @@ public enum RutUtils {
         let digit = 11 - sum % 11
 
         return digit
+    }
+
+    /// This method will return the full chilean rut with generated digit verifier, it will tell:
+    ///  first if its valid, second the formetted chilean rut, and its raw string.
+    ///
+    /// - Parameter rutBody: the chilean rut number, but without the identifier number.
+    public static func getValidRut(of rutBody: String) -> (formatted: String, rawRut: String) {
+        let cleanRutBody = cleanRut(rutBody)
+        let digit = getValidationDigit(of: cleanRutBody)
+
+        var digitV = ""
+
+        switch digit {
+        case 11:
+            digitV = "0"
+        case 10:
+            digitV = "k"
+        default:
+            digitV = String(digit)
+        }
+
+        let rut = cleanRutBody + String(digitV)
+        let formattedRut = formatRut(rut)
+        return (formattedRut, rut)
     }
 
     // MARK: - Utils
