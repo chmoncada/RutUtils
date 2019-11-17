@@ -9,37 +9,81 @@ import Foundation
 
 public enum RutUtils {
 
-    public static func validateRUT(_ rutToEval: String) -> (isValid: Bool, formatted: String) {
-        let rutRegEx = "^0*(\\d{1,3}(\\.?\\d{3})*)\\-?([\\dkK])$"
-        let predicateToEval = NSPredicate(format: "SELF MATCHES %@", rutRegEx)
-        var rut = rutToEval.replacingOccurrences(of: ".", with: "")
-        rut = rut.replacingOccurrences(of: "-", with: "")
+    // MARK: - REGEX Patterns
 
-        if predicateToEval.evaluate(with: rut) {
+    private static let patternFormatted = """
+    ^[0-9]{1,2} # chequea si hay 2 o 3 numeros iniciales
+    (\\.[0-9]{3})* # chequea los bloques .XXX
+    \\- # signo de division de digito identificador
+    [0-9,kK] # digito identificador
+    """
 
-            let endIndex = rut.index(rut.endIndex, offsetBy: -1)
-            let rutWithNoDV = String(rut[..<endIndex])
-            var multiplier = 2
-            var total = 0
-            for current in String(rutWithNoDV.reversed()) {
-                total += Int(String(current))! * multiplier
-                multiplier += 1
-                if multiplier > 7 {
-                    multiplier = 2
-                }
-            }
-            return ((((11 - total % 11 == 10) ?
-                "k" : 11 - total % 11 == 11 ? "0" :
-                String(11 - total % 11)) == String(describing: rut.last!).lowercased()), formatRut(rut))
+    private static let patternRaw = """
+    ^[0-9] # un primer digito
+    [0-9]* # varios digitos
+    [0-9,kK]$ # puede terminar en k como digito verificador
+    """
+
+    // MARK: - REGEX definitions
+
+    private static let regexFormatted = try? NSRegularExpression(
+        pattern: patternFormatted,
+        options: .allowCommentsAndWhitespace
+    )
+
+    private static let regexRaw = try? NSRegularExpression(
+        pattern: patternRaw,
+        options: .allowCommentsAndWhitespace
+    )
+
+    // MARK: - Methods to check a given RUT is correct
+
+    /// This method wil check first if the given rut israw or correct formatted , and second if its a valid chilean rut number
+    /// Returns a tuple group (bool, and correct format string)
+    ///
+    /// - Parameter rut: chilean rut string, can be formatted with hypen and dots, or a string.
+    public static func validateRUT(_ rut: String) -> (isValid: Bool, formatted: String) {
+
+        guard
+            let regexFormatted = regexFormatted,
+            let regexRaw = regexRaw,
+            regexFormatted.matches(rut) || regexRaw.matches(rut)
+        else {
+                return (false, rut)
         }
 
-        return (false, rutToEval)
+        var rut = rut.replacingOccurrences(of: ".", with: "")
+        rut = rut.replacingOccurrences(of: "-", with: "")
+
+        let endIndex = rut.index(rut.endIndex, offsetBy: -1)
+        let rutWithNoDV = String(rut[..<endIndex])
+        var multiplier = 2
+        var total = 0
+        for current in String(rutWithNoDV.reversed()) {
+            total += Int(String(current))! * multiplier
+            multiplier += 1
+            if multiplier > 7 {
+                multiplier = 2
+            }
+        }
+        return ((((11 - total % 11 == 10) ?
+            "k" : 11 - total % 11 == 11 ? "0" :
+            String(11 - total % 11)) == String(describing: rut.last!).lowercased()), formatRut(rut))
+
     }
 
-    public static func formatRut(_ rutToFormat: String) -> String! {
+    /// This method returns a correct formated chilean rut string
+    ///
+    /// - Parameter rut: chilean valid rut string, can be formatted with hypen and dots, or a string.
+    public static func formatRut(_ rut: String) -> String! {
+
+        guard rut.count > 1 else {
+            return rut
+        }
+
         var counter = 0
         var formattedRut: String
-        var rut = rutToFormat.replacingOccurrences(of: ".", with: "")
+        var rut = rut.replacingOccurrences(of: ".", with: "")
         rut = rut.replacingOccurrences(of: "-", with: "")
         formattedRut = "-" + String(describing: rut.last!)
         for index in (0...(rut.count - 2)).reversed() {
@@ -53,5 +97,14 @@ public enum RutUtils {
         }
 
         return formattedRut
+    }
+}
+
+// MARK: - Private Extensions
+
+private extension NSRegularExpression {
+    func matches(_ string: String) -> Bool {
+        let range = NSRange(location: 0, length: string.utf16.count)
+        return firstMatch(in: string, options: [], range: range) != nil
     }
 }

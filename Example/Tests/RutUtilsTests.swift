@@ -77,17 +77,17 @@ class RutUtilsTests: XCTestCase {
 
     // MARK: - validateRUT Test
 
-//    func testValidRutLengthOne() {
-//        let unformattedRut = "1"
-//        let formattedRut = "1"
-//        let validator = RutUtils.validateRUT(unformattedRut)
-//
-//        XCTAssertFalse(validator.isValid)
-//        XCTAssertEqual(validator.formatted, formattedRut)
-//
-//        let realFormatedRut = RutUtils.formatRut(unformattedRut)
-//        XCTAssertEqual(formattedRut, realFormatedRut)
-//    }
+    func testValidRutLengthOne() {
+        let unformattedRut = "1"
+        let formattedRut = "1"
+        let validator = RutUtils.validateRUT(unformattedRut)
+
+        XCTAssertFalse(validator.isValid)
+        XCTAssertEqual(validator.formatted, formattedRut)
+
+        let realFormatedRut = RutUtils.formatRut(unformattedRut)
+        XCTAssertEqual(formattedRut, realFormatedRut)
+    }
 
     func testValidRutLengthTwo() {
         let unformattedRut = "19"
@@ -287,19 +287,19 @@ class RutUtilsTests: XCTestCase {
 
     // MARK: - formatedRut Test
 
-//    func testFormattedEmpty() {
-//        let unformattedRut = ""
-//        let formattedRut = ""
-//        let result = RutUtils.formatRut(unformattedRut)
-//        XCTAssertEqual(result, formattedRut)
-//    }
+    func testFormattedEmpty() {
+        let unformattedRut = ""
+        let formattedRut = ""
+        let result = RutUtils.formatRut(unformattedRut)
+        XCTAssertEqual(result, formattedRut)
+    }
 
-//    func testFormattedLength1() {
-//        let unformattedRut = "1"
-//        let formattedRut = "1"
-//        let result = RutUtils.formatRut(unformattedRut)
-//        XCTAssertEqual(result, formattedRut)
-//    }
+    func testFormattedLength1() {
+        let unformattedRut = "1"
+        let formattedRut = "1"
+        let result = RutUtils.formatRut(unformattedRut)
+        XCTAssertEqual(result, formattedRut)
+    }
 
     func testFormattedLength2() {
         let unformattedRut = "19"
