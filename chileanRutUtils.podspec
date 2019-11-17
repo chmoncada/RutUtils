@@ -7,7 +7,7 @@
 #
 
 Pod::Spec.new do |s|
-  s.name             = 'chileanRutUtils'
+  s.name             = 'RutUtils'
   s.version          = '0.1.0'
   s.summary          = 'Helper methods to validate and generate RUT Chilean numbers'
 
