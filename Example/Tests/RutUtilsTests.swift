@@ -488,11 +488,11 @@ class RutUtilsTests: XCTestCase {
         XCTAssertFalse(isValid)
     }
 
-//    func testCoreValidRutEmpty() {
-//        let unformattedRut = ""
-//        let isValid = RutUtils.isValidRut(unformattedRut)
-//        XCTAssertFalse(isValid)
-//    }
+    func testCoreValidRutEmpty() {
+        let unformattedRut = ""
+        let isValid = RutUtils.isValidRut(unformattedRut)
+        XCTAssertFalse(isValid)
+    }
 
     func testCoreValidRutOneChar() {
         let unformattedRut = "1"
@@ -504,5 +504,21 @@ class RutUtilsTests: XCTestCase {
         let unformattedRut = "19"
         let isValid = RutUtils.isValidRut(unformattedRut)
         XCTAssertTrue(isValid)
+    }
+
+    // MARK: - calculate DV method
+
+    func testCalculateRutDvDigitK() {
+        let bodyRut = "9043943"
+        let validationDigit = 10
+        let calculatedDV = RutUtils.getValidationDigit(of: bodyRut)
+        XCTAssertEqual(calculatedDV, validationDigit)
+    }
+
+    func testCalculateRutDvDigit6() {
+        let bodyRut = "14400408"
+        let validationDigit = 6
+        let calculatedDV = RutUtils.getValidationDigit(of: bodyRut)
+        XCTAssertEqual(calculatedDV, validationDigit)
     }
 }

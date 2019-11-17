@@ -61,24 +61,26 @@ public enum RutUtils {
 
     /// This method will check if the rut is mathematically correct.
     ///
-    /// - Parameter string: chilean rut numbers only
+    /// - Parameter string: chilean rut numbers  with verification digit
     public static func isValidRut(_ rut: String) -> Bool {
-        let cleanedRut = cleanRut(rut)
-
-        let endIndex = cleanedRut.index(cleanedRut.endIndex, offsetBy: -1)
-        let rutWithNoDV = String(cleanedRut[..<endIndex])
-        var multiplier = 2
-        var total = 0
-        for current in String(rutWithNoDV.reversed()) {
-            total += Int(String(current))! * multiplier
-            multiplier += 1
-            if multiplier > 7 {
-                multiplier = 2
-            }
+        var rutBody = rut
+        guard
+            let regexFormatted = regexFormatted, let regexRaw = regexRaw,
+            regexFormatted.matches(rut) || regexRaw.matches(rut) else {
+                return false
         }
-        return (((11 - total % 11 == 10) ?
-            "k" : 11 - total % 11 == 11 ? "0" :
-            String(11 - total % 11)) == String(describing: cleanedRut.last!).lowercased())
+
+        let lastChar = String(rutBody.removeLast())
+        let digit = getValidationDigit(of: rutBody)
+
+        switch digit {
+        case 11:
+            return lastChar == "0"
+        case 10:
+            return lastChar.lowercased() == "k"
+        default:
+            return Int(lastChar) == digit
+        }
     }
 
     /// This method returns a correct formated chilean rut string
@@ -106,6 +108,33 @@ public enum RutUtils {
         }
 
         return formattedRut
+    }
+
+    // MARK: - Methods to generate Valid RUT
+
+    /// This method will calculate the digit verifier from a rut body
+    ///  Returns and Int from 0 to 11
+    ///
+    /// - Parameter rutBody: the chilean rut number, but without the identifier number.
+    public static func getValidationDigit(of rutBody: String) -> Int {
+
+        struct RutValidatorGenerator: Sequence, IteratorProtocol {
+            var current = 0
+
+            mutating func next() -> Int? {
+                defer { current += 1 }
+
+                return current % 6 + 2
+            }
+        }
+
+        let validateChar = rutBody.reversed()
+
+        let validatorSequence = RutValidatorGenerator().prefix(validateChar.count)
+        let sum = zip(validateChar, validatorSequence).map { Int(String($0))! * $1 }.reduce(0, +)
+        let digit = 11 - sum % 11
+
+        return digit
     }
 
     // MARK: - Utils
