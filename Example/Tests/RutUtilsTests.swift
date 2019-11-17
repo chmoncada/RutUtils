@@ -506,7 +506,7 @@ class RutUtilsTests: XCTestCase {
         XCTAssertTrue(isValid)
     }
 
-    // MARK: - calculate DV method
+    // MARK: - calculate Validation Digit
 
     func testCalculateRutDvDigitK() {
         let bodyRut = "9043943"

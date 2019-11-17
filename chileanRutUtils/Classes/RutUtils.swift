@@ -56,7 +56,6 @@ public enum RutUtils {
 
         let cleanedRut = cleanRut(rut)
         return (isValidRut(cleanedRut), formatRut(cleanedRut))
-
     }
 
     /// This method will check if the rut is mathematically correct.
@@ -88,26 +87,27 @@ public enum RutUtils {
     /// - Parameter rut: chilean valid rut string, can be formatted with hypen and dots, or a string.
     public static func formatRut(_ rut: String) -> String! {
 
+        var cleanedRut = cleanRut(rut)
+
         guard rut.count > 1 else {
             return rut
         }
 
-        var counter = 0
-        var formattedRut: String
-        var rut = rut.replacingOccurrences(of: ".", with: "")
-        rut = rut.replacingOccurrences(of: "-", with: "")
-        formattedRut = "-" + String(describing: rut.last!)
-        for index in (0...(rut.count - 2)).reversed() {
-            let subString = rut.dropFirst(index).first!
-            formattedRut = String(describing: subString) + formattedRut
-            counter += 1
-            if counter == 3 && index != 0 {
-                formattedRut = "." + formattedRut
-                counter = 0
-            }
-        }
+        //Get dv and body rut
+        let validationDigit = cleanedRut.removeLast()
 
-        return formattedRut
+        //Reverse the string
+        let reversedCleanedRut = cleanedRut.reversed()
+
+        //Group rutBody by maxLength of 3, glue it with separator, reverse it
+        let formattedRutBody = String(
+            reversedCleanedRut
+                .groupedBy(3)
+                .joined(separator: ".")
+                .reversed()
+        )
+
+        return "\(formattedRutBody)-\(validationDigit)"
     }
 
     // MARK: - Methods to generate Valid RUT
@@ -155,5 +155,20 @@ private extension NSRegularExpression {
     func matches(_ string: String) -> Bool {
         let range = NSRange(location: 0, length: string.utf16.count)
         return firstMatch(in: string, options: [], range: range) != nil
+    }
+}
+
+private extension ReversedCollection where Base == String {
+    /// This method returns an array of grouped strings of given length
+    ///
+    /// - Parameter length: max length string to group
+    func groupedBy(_ length: Int) -> [String] {
+        return
+            stride(from: 0, to: self.count, by: length)
+            .map {
+                let start = self.index(self.startIndex, offsetBy: $0)
+                let end = self.index(start, offsetBy: length, limitedBy: self.endIndex) ?? self.endIndex
+                return String(self[start..<end])
+            }
     }
 }
