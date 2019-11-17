@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'RutUtils'
-  s.version          = '0.1.0'
+  s.version          = '1.0.0'
   s.summary          = 'Helper methods to validate and generate RUT Chilean numbers'
 
   s.homepage         = 'https://github.com/chmoncada/chileanRutUtils'
@@ -20,5 +20,5 @@ Pod::Spec.new do |s|
 
   s.swift_versions = ['5.0', '5.1']
 
-  s.source_files = 'chileanRutUtils/Classes/**/*'
+  s.source_files = 'RutUtils/Classes/**/*'
 end
