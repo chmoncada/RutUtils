@@ -11,6 +11,8 @@ public enum RutUtils {
 
     // MARK: - REGEX Patterns
 
+    private static let allowedRutCharacters = #"[^\d,^k^K]"#
+
     private static let patternFormatted = """
     ^[0-9]{1,2} # chequea si hay 2 o 3 numeros iniciales
     (\\.[0-9]{3})* # chequea los bloques .XXX
@@ -52,11 +54,10 @@ public enum RutUtils {
                 return (false, rut)
         }
 
-        var rut = rut.replacingOccurrences(of: ".", with: "")
-        rut = rut.replacingOccurrences(of: "-", with: "")
+        let cleanedRut = cleanRut(rut)
 
-        let endIndex = rut.index(rut.endIndex, offsetBy: -1)
-        let rutWithNoDV = String(rut[..<endIndex])
+        let endIndex = cleanedRut.index(cleanedRut.endIndex, offsetBy: -1)
+        let rutWithNoDV = String(cleanedRut[..<endIndex])
         var multiplier = 2
         var total = 0
         for current in String(rutWithNoDV.reversed()) {
@@ -68,7 +69,7 @@ public enum RutUtils {
         }
         return ((((11 - total % 11 == 10) ?
             "k" : 11 - total % 11 == 11 ? "0" :
-            String(11 - total % 11)) == String(describing: rut.last!).lowercased()), formatRut(rut))
+            String(11 - total % 11)) == String(describing: cleanedRut.last!).lowercased()), formatRut(cleanedRut))
 
     }
 
@@ -97,6 +98,17 @@ public enum RutUtils {
         }
 
         return formattedRut
+    }
+
+    // MARK: - Utils
+
+    /// This method returns a string and removes dots and hypen from the rut,
+    /// it will also remove any other foreign chracters too.
+    ///
+    /// - Parameter rut: chilean rut string, can be formatted with hypen and dots, or a string.
+    public static func cleanRut(_ rut: String) -> String {
+        let cleanRut = rut.replacingOccurrences(of: allowedRutCharacters, with: "", options: .regularExpression)
+        return cleanRut
     }
 }
 

@@ -412,4 +412,41 @@ class RutUtilsTests: XCTestCase {
         let result = RutUtils.formatRut(unformattedRut)
         XCTAssertEqual(result, formattedRut)
     }
+
+    // MARK: - cleanRut Method Test
+
+    func testCleanFormatedRut() {
+        let unformattedRut = "14.400.407-8"
+        let expectedCleanRut = "144004078"
+        let cleanRut = RutUtils.cleanRut(unformattedRut)
+        XCTAssertEqual(cleanRut, expectedCleanRut)
+    }
+
+    func testCleanFormatedRutDigitK() {
+        let unformattedRut = "20.961.605-K"
+        let expectedCleanRut = "20961605K"
+        let cleanRut = RutUtils.cleanRut(unformattedRut)
+        XCTAssertEqual(cleanRut, expectedCleanRut)
+    }
+
+    func testCleanFormatedRutDigitKSmall() {
+        let unformattedRut = "20.961.605-k"
+        let expectedCleanRut = "20961605k"
+        let cleanRut = RutUtils.cleanRut(unformattedRut)
+        XCTAssertEqual(cleanRut, expectedCleanRut)
+    }
+
+    func testCleanBadRutCharacters() {
+        let unformattedRut = "1abcd#)(-9"
+        let expectedCleanRut = "19"
+        let cleanRut = RutUtils.cleanRut(unformattedRut)
+        XCTAssertEqual(cleanRut, expectedCleanRut)
+    }
+
+    func testCleanEmptyRut() {
+        let unformattedRut = ""
+        let expectedCleanRut = ""
+        let cleanRut = RutUtils.cleanRut(unformattedRut)
+        XCTAssertEqual(cleanRut, expectedCleanRut)
+    }
 }
