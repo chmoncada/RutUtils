@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'RutUtils'
-  s.version          = '1.0.0'
+  s.version          = '1.1.0'
   s.summary          = 'Helper methods to validate and generate RUT Chilean numbers'
 
   s.homepage         = 'https://github.com/chmoncada/chileanRutUtils'
