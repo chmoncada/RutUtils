@@ -449,4 +449,60 @@ class RutUtilsTests: XCTestCase {
         let cleanRut = RutUtils.cleanRut(unformattedRut)
         XCTAssertEqual(cleanRut, expectedCleanRut)
     }
+
+    // MARK: - isValidRut Method Basic Tests
+
+    func testCoreValidRutPositive() {
+        let unformattedRut = "144004019"
+        let isValid = RutUtils.isValidRut(unformattedRut)
+        XCTAssertTrue(isValid)
+    }
+
+    func testCoreValidRutNegative() {
+        let unformattedRut = "144004010"
+        let isValid = RutUtils.isValidRut(unformattedRut)
+        XCTAssertFalse(isValid)
+    }
+
+    func testCoreValidRutDigitCapitalK() {
+        let unformattedRut = "20961605K"
+        let isValid = RutUtils.isValidRut(unformattedRut)
+        XCTAssertTrue(isValid)
+    }
+
+    func testCoreValidRutDigitSmallK() {
+        let unformattedRut = "20961605k"
+        let isValid = RutUtils.isValidRut(unformattedRut)
+        XCTAssertTrue(isValid)
+    }
+
+    func testCoreValidRutDigitCapitalKNegative() {
+        let unformattedRut = "20961604K" //bad rut, no k
+        let isValid = RutUtils.isValidRut(unformattedRut)
+        XCTAssertFalse(isValid)
+    }
+
+    func testCoreValidRutDigitSmallKNegative() {
+        let unformattedRut = "20961604k" //bad rut, no k
+        let isValid = RutUtils.isValidRut(unformattedRut)
+        XCTAssertFalse(isValid)
+    }
+
+//    func testCoreValidRutEmpty() {
+//        let unformattedRut = ""
+//        let isValid = RutUtils.isValidRut(unformattedRut)
+//        XCTAssertFalse(isValid)
+//    }
+
+    func testCoreValidRutOneChar() {
+        let unformattedRut = "1"
+        let isValid = RutUtils.isValidRut(unformattedRut)
+        XCTAssertFalse(isValid)
+    }
+
+    func testCoreValidRutTwoChar() {
+        let unformattedRut = "19"
+        let isValid = RutUtils.isValidRut(unformattedRut)
+        XCTAssertTrue(isValid)
+    }
 }

@@ -55,6 +55,15 @@ public enum RutUtils {
         }
 
         let cleanedRut = cleanRut(rut)
+        return (isValidRut(cleanedRut), formatRut(cleanedRut))
+
+    }
+
+    /// This method will check if the rut is mathematically correct.
+    ///
+    /// - Parameter string: chilean rut numbers only
+    public static func isValidRut(_ rut: String) -> Bool {
+        let cleanedRut = cleanRut(rut)
 
         let endIndex = cleanedRut.index(cleanedRut.endIndex, offsetBy: -1)
         let rutWithNoDV = String(cleanedRut[..<endIndex])
@@ -67,10 +76,9 @@ public enum RutUtils {
                 multiplier = 2
             }
         }
-        return ((((11 - total % 11 == 10) ?
+        return (((11 - total % 11 == 10) ?
             "k" : 11 - total % 11 == 11 ? "0" :
-            String(11 - total % 11)) == String(describing: cleanedRut.last!).lowercased()), formatRut(cleanedRut))
-
+            String(11 - total % 11)) == String(describing: cleanedRut.last!).lowercased())
     }
 
     /// This method returns a correct formated chilean rut string
